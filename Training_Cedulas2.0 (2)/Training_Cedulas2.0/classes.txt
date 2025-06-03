@@ -1,0 +1,16 @@
+apellidos
+borroso
+carnet
+cedula
+dañado
+diagonal
+invertido
+licencia
+limpio
+nombres
+normal
+numero_cedula
+otro
+papeleta_votacion
+pasaporte
+vertical

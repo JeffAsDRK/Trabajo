@@ -1,0 +1,73 @@
+{
+  "categories": [
+    {
+      "id": 0,
+      "name": "apellidos"
+    },
+    {
+      "id": 1,
+      "name": "borroso"
+    },
+    {
+      "id": 2,
+      "name": "carnet"
+    },
+    {
+      "id": 3,
+      "name": "cedula"
+    },
+    {
+      "id": 4,
+      "name": "da\u00f1ado"
+    },
+    {
+      "id": 5,
+      "name": "diagonal"
+    },
+    {
+      "id": 6,
+      "name": "invertido"
+    },
+    {
+      "id": 7,
+      "name": "licencia"
+    },
+    {
+      "id": 8,
+      "name": "limpio"
+    },
+    {
+      "id": 9,
+      "name": "nombres"
+    },
+    {
+      "id": 10,
+      "name": "normal"
+    },
+    {
+      "id": 11,
+      "name": "numero_cedula"
+    },
+    {
+      "id": 12,
+      "name": "otro"
+    },
+    {
+      "id": 13,
+      "name": "papeleta_votacion"
+    },
+    {
+      "id": 14,
+      "name": "pasaporte"
+    },
+    {
+      "id": 15,
+      "name": "vertical"
+    }
+  ],
+  "info": {
+    "year": 2025,
+    "version": "1.0",
+    "contributor": "Label Studio"
+  }
+}
