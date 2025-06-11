@@ -1,3 +1,0 @@
-Punto 1: (28, 242)
-Punto 2: (308, 241)
-Ángulo (grados): 0.20
