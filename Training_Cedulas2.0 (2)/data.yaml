@@ -1,22 +1,11 @@
-path: E:/Users/Documents/Trabajo/Training_Cedulas2.0 (2)/dataset
-train: E:/Users/Documents/Trabajo/Training_Cedulas2.0 (2)/dataset/images/train
-val: E:/Users/Documents/Trabajo/Training_Cedulas2.0 (2)/dataset/images/val
+path: C:/Users/USER/Documents/Trabajo/Training_Cedulas2.0 (2)/dataset
+train: C:/Users/USER/Documents/Trabajo/Training_Cedulas2.0 (2)/dataset/images/train
+val: C:/Users/USER/Documents/Trabajo/Training_Cedulas2.0 (2)/dataset/images/val
 task: obb
 names:
-  0: apellidos
-  1: borroso  
-  2: carnet  
-  3: cedula  
-  4: danado  
-  5: diagonal 
-  6: invertido
-  7: licencia 
-  8: limpio  
-  9: nombres  
-  10: normal  
-  11: numero_cedula  
-  12: otro  
-  13: papeleta_votacion  
-  14: pasaporte  
-  15: vertical
-
+  0: Foto
+  1: Invertido
+  2: Vertical
+  3: apellidos
+  4: nombres
+  5: numero_cedula
