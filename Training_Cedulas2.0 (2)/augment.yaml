@@ -1,0 +1,10 @@
+augment:
+  degrees: 180           # Rango de rotación [-180, 180]
+  translate: 0.1         # Desplazamiento en X/Y
+  scale: 0.5             # Escalado aleatorio
+  shear: 0               # Cizalladura (no usada aquí)
+  fliplr: 0.5            # Volteo horizontal
+  flipud: 0.0            # Volteo vertical
+  perspective: 0.0       # Distorsión de perspectiva (opcional)
+  mosaic: 1.0            # Mosaic augmentation
+  mixup: 0.0             # MixUp (opcional)
