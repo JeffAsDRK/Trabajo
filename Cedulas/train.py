@@ -1,12 +1,22 @@
 import pandas as pd
 import torch
+from torch.utils.data import DataLoader, TensorDataset
+import numpy as np
+from torchvision import transforms
+import os
+from PIL import Image
+import random
+from collections import defaultdict
+import lightning as L
+from lightning.pytorch.loggers import CSVLogger
+from Modules import *
+from sklearn.model_selection import train_test_split
+
 print(torch.cuda.is_available())  # ¿True?
-print(torch.version.cuda)         # ¿"11.8", "12.1", etc?|
+print(torch.version.cuda)  # ¿"11.8", "12.1", etc?|
 print(torch.cuda.get_device_name(0))  # ¿Detecta tu GPU?
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
-import os
-from PIL import Image
 df_angle = pd.read_csv("/root/jastudillo/Trabajo/Cedulas/progreso_orientacion.csv")
 ruta_base = "/root/jastudillo/Trabajo/Cedulas/imagenes_cedula_peq"
 archivos_procesados = set(df_angle["File"].tolist())
@@ -28,31 +38,43 @@ for carpeta_actual, subcarpetas, archivos in os.walk(ruta_base):
                 except Exception as e:
                     print(f"Error al procesar {archivo}: {e}")
 
-import random
-from collections import defaultdict
 
 rotation_counts = defaultdict(int)  # Guarda cuántas veces se ha rotado cada archivo
 
+
+def generar_angulo_biased():
+    # Opciones centradas en ±90 y ±180 con algo de ruido
+    centros = [-180, -90, 90, 180]
+    centro = random.choice(centros)
+    ruido = np.random.normal(loc=0, scale=15)  # Ruido pequeño
+    return centro + ruido
+
+
 def aplicar_aumento(row):
-    ran = random.uniform(-45, 45)
+    ran = generar_angulo_biased()
     row["Angle"] += ran
-    row["Matrix"] = row["Matrix"].rotate(ran)
+    row["Matrix"] = row["Matrix"].rotate(ran, expand=True)
     row["File"] = row["File"].replace(".jpg", f"_aumentado_{ran:.1f}.jpg")
     return row
 
+
 def aumentar_df(df_base, frac, repeticiones, etiquetas):
     global df_angle
-   
+
     for i in range(repeticiones):
         # Elegir un intervalo aleatoriamente
-        df_aument = df_base[df_base["Label"].isin(etiquetas)].sample(frac=frac, random_state=i).copy()
-        
+        df_aument = (
+            df_base[df_base["Label"].isin(etiquetas)]
+            .sample(frac=frac, random_state=i)
+            .copy()
+        )
+
         # Filtra imágenes que aún no han sido rotadas más de 2 veces
         df_aument = df_aument[df_aument["File"].apply(lambda f: rotation_counts[f] < 2)]
 
         if df_aument.empty:
             continue  # Saltar si no hay nada para aumentar
-        
+
         # Rotación y actualización
         df_aument = df_aument.apply(aplicar_aumento, axis=1)
 
@@ -63,17 +85,16 @@ def aumentar_df(df_base, frac, repeticiones, etiquetas):
         # Concatenar
         df_angle = pd.concat([df_angle, df_aument], ignore_index=True)
 
-# Aplicar a diferentes clases
-aumentar_df(df_angle, frac=0.5, repeticiones=5*12,  etiquetas=["Cedula_Amarilla"])
-aumentar_df(df_angle, frac=0.7, repeticiones=5*12,  etiquetas=["Cedula_Celeste"])
-aumentar_df(df_angle, frac=0.8, repeticiones=7*12,  etiquetas=["Cedula_Guayaquil"])
-aumentar_df(df_angle, frac=1.0, repeticiones=9*12,  etiquetas=["Licencias"])
-aumentar_df(df_angle, frac=1.0, repeticiones=8*12,  etiquetas=["Papeleta"])
-aumentar_df(df_angle, frac=1.0, repeticiones=11*12,  etiquetas=["Otros"])
 
-from torch.utils.data import DataLoader, TensorDataset
-import numpy as np
-from torchvision import transforms
+print("Procesando Datos")
+# Aplicar a diferentes clases
+aumentar_df(df_angle, frac=0.5, repeticiones=5 * 16, etiquetas=["Cedula_Amarilla"])
+aumentar_df(df_angle, frac=0.7, repeticiones=5 * 16, etiquetas=["Cedula_Celeste"])
+aumentar_df(df_angle, frac=0.8, repeticiones=7 * 16, etiquetas=["Cedula_Guayaquil"])
+aumentar_df(df_angle, frac=1.0, repeticiones=9 * 16, etiquetas=["Licencias"])
+aumentar_df(df_angle, frac=1.0, repeticiones=8 * 16, etiquetas=["Papeleta"])
+aumentar_df(df_angle, frac=1.0, repeticiones=11 * 16, etiquetas=["Otros"])
+
 
 # Transformador para convertir imágenes PIL a tensores normalizados
 transform = transforms.Compose(
@@ -91,7 +112,7 @@ angles = torch.tensor(df_angle["Angle"].values * np.pi / 180, dtype=torch.float3
 
 images = torch.stack(df_angle["Matrix"].apply(lambda img: transform(img)).tolist())
 
-from sklearn.model_selection import train_test_split,KFold
+
 print("Cargando Datos")
 # Dataset y dataloaders
 batch = 128
@@ -101,9 +122,7 @@ train_dataset, val_dataset = train_test_split(train, test_size=0.2, random_state
 train_loader = DataLoader(train_dataset, batch_size=batch)
 val_loader = DataLoader(val_dataset, batch_size=batch)
 test_loader = DataLoader(test_dataset, batch_size=batch)
-import lightning as L
-from lightning.pytorch.loggers import CSVLogger
-from Modules import *
+
 
 logger = CSVLogger("logs", name="mobilenet_angle")
 # Entrenamiento
