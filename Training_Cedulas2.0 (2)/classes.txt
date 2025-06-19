@@ -1,10 +1,4 @@
 Foto
-Invertido
-Vertical
 apellidos
-dañado
-invertido
 nombres
 numero_cedula
-otro
-vertical
