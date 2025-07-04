@@ -211,9 +211,7 @@ class Id_identicator:
         self.types, self.recortado_rotado = zip(*ordenado)
 
         for tipo, img in zip(self.types, self.recortado_rotado):
-            if tipo == 0:
-                continue
-            elif tipo == 3:  # Tipo cédula
+            if tipo == 1:  # Tipo cédula
                 texto = self.cn_ocr.ocr_for_single_line(img).get("text", "")
                 cedulas = re.findall(self.patron, texto)
                 if cedulas:
