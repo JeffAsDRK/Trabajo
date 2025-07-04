@@ -145,15 +145,6 @@ def rellenar_con_fondo(imagen, nuevo_ancho, nuevo_alto, color_fondo=(255, 255, 2
     return fondo
 
 
-import torch
-import numpy as np
-import cv2
-import re
-from cnstd import CnStd
-from cnocr import CnOcr
-from ultralytics import YOLO
-
-
 class Id_identicator:
     """
     Clase para detectar y extraer número de cédula y nombres desde imágenes usando YOLO + OCR.
