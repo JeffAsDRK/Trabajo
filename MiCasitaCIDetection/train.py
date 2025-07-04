@@ -14,11 +14,11 @@ if __name__ == "__main__":
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     model.train(
         data="/root/jastudillo/Trabajo/Training_Cedulas/data.yaml",  # Ruta al archivo de configuración
-        epochs=1000,  # Número de épocas
+        epochs=500,  # Número de épocas
         imgsz=640,  # Tamaño de entrada de imagen
-        batch=512,  # Tamaño del batch
-        workers=0,  # Núm. de workers para carga de datos
-        device=[-1,-1],  # Usa la GPU 0; usa "cpu" para CPU
+        batch=128,  # Tamaño del batch
+        workers=16,  # Núm. de workers para carga de datos
+        device=-1,  # Usa la GPU 0; usa "cpu" para CPU
         name="yolo11_obb_custom",  # Nombre de la carpeta del experimento
         verbose=True,
         patience=50,
