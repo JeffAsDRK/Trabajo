@@ -1,0 +1,7 @@
+path: /root/jastudillo/Trabajo/Training_Cedulas/dataset
+train: /root/jastudillo/Trabajo/Training_Cedulas/dataset/images/train
+val: /root/jastudillo/Trabajo/Training_Cedulas/dataset/images/val
+task: obb
+names:
+  0: nombres  
+  1: numero_cedula 
